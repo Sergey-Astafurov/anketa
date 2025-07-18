@@ -234,18 +234,18 @@ async function addProfile() {
   //   preferenceComments: formData.preferenceComments,
   // };
   formData.photo = (formData.photo || [])
-  .filter((p) => typeof p === "object" && p.name)
-  .map((p) => ({
-    name: p.name.trim().replace(/\/{2,}/g, "/"),
-    preview: p.preview,
-  }));
+    .filter((p) => typeof p === "object" && p.name)
+    .map((p) => ({
+      name: p.name.trim().replace(/\/{2,}/g, "/"),
+      preview: p.preview,
+    }));
   console.log(formData.photo);
   // Главное фото — из исправленных путей
   const mainPic =
-  typeof formData.photo[0] === "string"
-    ? formData.photo[0]
-    : formData.photo[0]?.name || "";
-  console.log(formData.photo[0].name );
+    typeof formData.photo[0] === "string"
+      ? formData.photo[0]
+      : formData.photo[0]?.name || "";
+  console.log(formData.photo[0].name);
   const payload = {
     user_id: formData.user_id || "",
     pic: mainPic,
@@ -290,8 +290,11 @@ async function addProfile() {
     checkService: formData.checkService || [],
     status_id: formData.status_id || 7,
 
-    photo: formData.photo || [],
-    video: formData.video || "",
+    photo: formData.photo.map((p) => p.name || ""),
+    video:
+      typeof formData.video === "object" && formData.video.name
+        ? formData.video.name
+        : formData.video,
     tags: formData.tags || [],
 
     verification_code: formData.verification_code || "",
